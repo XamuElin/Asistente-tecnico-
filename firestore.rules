@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email == 'gekosamu07@gmail.com' ||
+        request.auth.token.email.lower() == 'gekosamu07@gmail.com'
+      );
+    }
+
+    // Knowledge Items (files & URLs)
+    match /knowledge_items/{itemId} {
+      // All advisors and staff can read knowledge items
+      allow read: if true;
+      // ONLY gekosamu07@gmail.com can create, edit, replace or delete
+      allow write: if isAdmin();
+
+      // Text chunks subcollection
+      match /chunks/{chunkId} {
+        allow read: if true;
+        allow write: if isAdmin();
+      }
+    }
+
+    // Admins list
+    match /admins/{adminId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Unanswered questions log
+    match /preguntas_sin_respuesta/{questionId} {
+      // Any authenticated advisor can log unanswered questions
+      allow create: if isAuthenticated();
+      // Only the official administrator can view or manage
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

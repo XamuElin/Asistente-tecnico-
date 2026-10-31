@@ -1,0 +1,165 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator user authorized to manage knowledge items.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address of the administrator."
+        },
+        "addedAt": {
+          "type": "number",
+          "description": "Timestamp when the admin was designated."
+        },
+        "isInitialAdmin": {
+          "type": "boolean",
+          "description": "Whether this is the first bootstrapping admin."
+        }
+      },
+      "required": ["email", "addedAt"]
+    },
+    "KnowledgeItem": {
+      "title": "KnowledgeItem",
+      "description": "Document or web link containing technical knowledge.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Document filename or link title."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["file", "url"],
+          "description": "Type of item: file or url."
+        },
+        "fileType": {
+          "type": "string",
+          "description": "File extension: pdf, docx, txt, csv, xlsx, image."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category: Pagos, Garantias, Precios, Requisitos, Procedimientos, General."
+        },
+        "url": {
+          "type": "string",
+          "description": "Web URL if item is a link."
+        },
+        "storageUrl": {
+          "type": "string",
+          "description": "Firebase Storage download URL for original file."
+        },
+        "storagePath": {
+          "type": "string",
+          "description": "Firebase Storage path."
+        },
+        "content": {
+          "type": "string",
+          "description": "Extracted text content (first chunk or full text)."
+        },
+        "charCount": {
+          "type": "number",
+          "description": "Character count of extracted text."
+        },
+        "hasChunks": {
+          "type": "boolean",
+          "description": "Whether content is split into subcollection chunks."
+        },
+        "totalParts": {
+          "type": "number",
+          "description": "Total number of parts if chunked."
+        },
+        "size": {
+          "type": "number",
+          "description": "Size in bytes."
+        },
+        "updatedAt": {
+          "type": "number",
+          "description": "Timestamp of latest modification."
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Email of user who performed last update."
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp of creation."
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Email of user who created the item."
+        }
+      },
+      "required": ["name", "type", "category", "updatedAt", "updatedBy"]
+    },
+    "KnowledgeChunk": {
+      "title": "KnowledgeChunk",
+      "description": "Chunked text partition of large documents.",
+      "type": "object",
+      "properties": {
+        "partIndex": {
+          "type": "number",
+          "description": "Index of this chunk (0-indexed)."
+        },
+        "text": {
+          "type": "string",
+          "description": "Text partition content."
+        }
+      },
+      "required": ["partIndex", "text"]
+    },
+    "UnansweredQuestion": {
+      "title": "UnansweredQuestion",
+      "description": "Log of questions where information was not found in knowledge base.",
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "description": "Question asked by technical advisor."
+        },
+        "askedBy": {
+          "type": "string",
+          "description": "Email of the advisor."
+        },
+        "timestamp": {
+          "type": "number",
+          "description": "Timestamp when the question was asked."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "reviewed"],
+          "description": "Status for review by admin."
+        }
+      },
+      "required": ["question", "askedBy", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": {
+        "$ref": "#/entities/Admin"
+      },
+      "description": "Collection of administrator emails."
+    },
+    "/knowledge_items/{itemId}": {
+      "schema": {
+        "$ref": "#/entities/KnowledgeItem"
+      },
+      "description": "Collection of knowledge items (files and URLs)."
+    },
+    "/knowledge_items/{itemId}/chunks/{chunkId}": {
+      "schema": {
+        "$ref": "#/entities/KnowledgeChunk"
+      },
+      "description": "Subcollection of text chunks for large files exceeding single doc limits."
+    },
+    "/preguntas_sin_respuesta/{questionId}": {
+      "schema": {
+        "$ref": "#/entities/UnansweredQuestion"
+      },
+      "description": "Log of unanswered questions for administrator review."
+    }
+  }
+}

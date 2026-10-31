@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <script>
+      // Suppress transient Vite HMR WebSocket connection notices in iframe preview
+      window.addEventListener('error', function (e) {
+        if (e && (e.message?.includes('WebSocket') || e.filename?.includes('vite/client') || e.error?.message?.includes('WebSocket'))) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function (e) {
+        if (e && (e.reason?.message?.includes('WebSocket') || String(e.reason).includes('WebSocket'))) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+        }
+      }, true);
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Super Redes - Asistente para Asesores Técnicos</title>
+    <meta name="description" content="Asistente interno para asesores técnicos con respuestas inmediatas basadas en archivos y enlaces cargados." />
+    <meta property="og:title" content="Super Redes - Asistente para Asesores Técnicos" />
+    <meta property="og:description" content="Asistente interno para asesores técnicos con respuestas inmediatas basadas en archivos y enlaces cargados." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- PWA Meta tags -->
+    <meta name="theme-color" content="#FAF8F5" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Super Redes" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    
+    <!-- Google Font Inter / Apple Typography Feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#FAF8F5] text-stone-800 antialiased selection:bg-amber-500/20 selection:text-amber-900">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

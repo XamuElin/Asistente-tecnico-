@@ -1,0 +1,6 @@
+{
+  "name": "Asistente para Asesores Técnicos",
+  "description": "Asistente interno para asesores técnicos con respuestas inmediatas basadas en archivos y enlaces cargados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
